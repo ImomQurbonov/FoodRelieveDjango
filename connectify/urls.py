@@ -1,9 +1,9 @@
 from django.urls import path
-
 from connectify.views import (
     MyFollowersAPIView, MyFollowingAPIView,
     FollowAPIView, RecipeRateAPIView,
-    ReviewAPIView, ReviewDeleteAPIView, MyFavouriteAPIView
+    ReviewAPIView, ReviewDeleteAPIView, MyFavouriteAPIView,
+    ReviewsGetAPIView
 )
 
 urlpatterns = [
@@ -12,6 +12,7 @@ urlpatterns = [
     path('follow', FollowAPIView.as_view(), name='follow'),
     path('recipes-rate', RecipeRateAPIView.as_view(), name='recipes-rate'),
     path('reviews', ReviewAPIView.as_view(), name='reviews'),
+    path('review-view', ReviewsGetAPIView.as_view(), name='review-view'),
     path('reviews/<int:pk>/delete', ReviewDeleteAPIView.as_view(), name='reviews-delete'),
     path('my-favourites', MyFavouriteAPIView.as_view(), name='my-favourites'),
 ]

@@ -1,3 +1,5 @@
 from django.contrib import admin
+from authmanager.models import UserRole, Role
 
-# Register your models here.
+
+admin.site.register((UserRole, Role))

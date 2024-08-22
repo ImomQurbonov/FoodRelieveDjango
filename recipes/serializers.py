@@ -112,3 +112,7 @@ class RecipesFilterSerializer(serializers.Serializer):
 
 class QuerySerializer(serializers.Serializer):
     query = serializers.CharField()
+
+
+class CategoryQuerySerializer(serializers.Serializer):
+    query = serializers.IntegerField

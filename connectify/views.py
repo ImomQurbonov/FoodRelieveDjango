@@ -1,5 +1,4 @@
-from distutils.command.clean import clean
-
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
@@ -9,9 +8,10 @@ from recipes.models import Recipes
 from .serializers import (
     FollowListSerializer, RatingSerializer,
     ReviewsSerializer, FollowSerializer,
-    FavouriteSerializer
+    FavouriteSerializer, CommentSerializer, QuerySerializer
 )
 from recipes.serializers import RecipesSerializer
+
 User = get_user_model()
 
 
@@ -89,6 +89,21 @@ class RecipeRateAPIView(generics.GenericAPIView):
         return Response(serializer.data)
 
 
+class ReviewsGetAPIView(generics.GenericAPIView):
+    permission_classes = (IsAuthenticated,)
+    serializer_class = CommentSerializer
+
+    @swagger_auto_schema(query_serializer=QuerySerializer())
+    def get(self, request):
+        query = request.GET.get('query')
+        comments = Comments.objects.filter(recipe=query)
+        if comments.exists():
+            serializer = CommentSerializer(comments, many=True)
+            return Response(serializer.data, status=200)
+        else:
+            return Response({'detail': "Comment not found"}, status=404)
+
+
 class ReviewAPIView(generics.GenericAPIView):
     permission_classes = (IsAuthenticated,)
     serializer_class = ReviewsSerializer
@@ -159,28 +174,3 @@ class MyFavouriteAPIView(generics.GenericAPIView):
         else:
             Favorite.objects.create(user=request.user, recipe=recipe)
             return Response({'detail': "Favourites created"}, status=201)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

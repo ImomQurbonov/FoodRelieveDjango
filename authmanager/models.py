@@ -20,5 +20,5 @@ class UserRole(models.Model):
 
 
 class ProfilesImage(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='profiles')
     image = models.ImageField(upload_to='media/profilesimage/')

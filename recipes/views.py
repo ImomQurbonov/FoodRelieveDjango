@@ -10,19 +10,25 @@ from connectify.models import Rating
 from .models import Recipes, Category, RecipesMedia
 from .permissions import IsMainAdminOrReadOnly
 from .serializers import (
-    RecipesSerializer, CategorySerializer,
+    RecipesSerializer, CategoryQuerySerializer,
     MyRecipesSerializer, RecipesDetailSerializer,
     RecipeUpdateSerializer, RecipesFilterSerializer,
-    QuerySerializer
+    QuerySerializer,
 )
 
 User = get_user_model()
 
 
-class CategoryListAPIView(generics.ListAPIView):
-    queryset = Category.objects.all()
-    serializer_class = CategorySerializer
+class CategoryListAPIView(generics.GenericAPIView):
+    serializer_class = RecipesSerializer
     permission_classes = [IsMainAdminOrReadOnly]
+
+    @swagger_auto_schema(query_serializer=CategoryQuerySerializer())
+    def get(self, request):
+        query = request.GET.get('query')
+        categories = Category.objects.get(pk=query)
+        recipe_list = Recipes.objects.filter(category=categories)
+        return Response(RecipesSerializer(recipe_list, many=True).data)
 
 
 class RecipesListAPIView(generics.ListAPIView):

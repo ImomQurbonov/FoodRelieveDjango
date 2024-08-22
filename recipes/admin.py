@@ -1,6 +1,5 @@
 from django.contrib import admin
-
-from recipes.models import Category
+from recipes.models import Category, Recipes, RecipesMedia
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -13,4 +12,4 @@ class CategoryAdmin(admin.ModelAdmin):
     def has_delete_permission(self, request, obj=None):
         return request.user.is_superuser
 
-admin.site.register(Category, CategoryAdmin)
+admin.site.register(Category, CategoryAdmin, Recipes, RecipesMedia)
